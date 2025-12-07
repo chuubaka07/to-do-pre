@@ -16,7 +16,7 @@ function loadTasks() {
     if (savedTasks) {
         return JSON.parse(savedTasks);
     } else {
-        return items
+        return items;
 }
 
 function createItem(item) {
