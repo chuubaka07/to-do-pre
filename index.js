@@ -18,7 +18,8 @@ function loadTasks() {
         return JSON.parse(savedTasks);
     } else {
         return items;
-}
+}};
+	
 
 function createItem(item) {
 	const template = document.getElementById("to-do__item-template");
@@ -87,4 +88,5 @@ formElement.addEventListener('submit', function (event) {
 
         formElement.reset();
     }
+});
 
