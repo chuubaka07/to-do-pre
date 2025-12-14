@@ -1,10 +1,10 @@
 let items = [
-	"Сделать проектную работу",
-	"Полить цветы",
-	"Пройти туториал по Реакту",
-	"Сделать фронт для своего проекта",
-	"Прогуляться по улице в солнечный день",
-	"Помыть посуду",
+    "Сделать проектную работу",
+    "Полить цветы",
+    "Пройти туториал по Реакту",
+    "Сделать фронт для своего проекта",
+    "Прогуляться по улице в солнечный день",
+    "Помыть посуду",
 ];
 
 const listElement = document.querySelector(".to-do__list");
@@ -12,81 +12,73 @@ const formElement = document.querySelector(".to-do__form");
 const inputElement = document.querySelector(".to-do__input");
 
 function loadTasks() {
-	const savedTasks = localStorage.getItem('tasks');
-	
+    const savedTasks = localStorage.getItem("tasks");
     if (savedTasks) {
         return JSON.parse(savedTasks);
-    } else {
-        return items;
-}};
-	
+    }
+    return items;
+}
 
 function createItem(item) {
-	const template = document.getElementById("to-do__item-template");
-	const clone = template.content.querySelector(".to-do__item").cloneNode(true);
-  const textElement = clone.querySelector(".to-do__item-text");
-  const deleteButton = clone.querySelector(".to-do__item-button_type_delete");
-  const duplicateButton = clone.querySelector(".to-do__item-button_type_duplicate");
-  const editButton = clone.querySelector(".to-do__item-button_type_edit");
+    const template = document.getElementById("to-do__item-template");
+    const clone = template.content.querySelector(".to-do__item").cloneNode(true);
+    const textElement = clone.querySelector(".to-do__item-text");
+    const deleteButton = clone.querySelector(".to-do__item-button_type_delete");
+    const duplicateButton = clone.querySelector(".to-do__item-button_type_duplicate");
+    const editButton = clone.querySelector(".to-do__item-button_type_edit");
 
-	textElement.textContent = item;
-	
-	duplicateButton.addEventListener("click", function() {
-		const itemName = textElement.textContent;
-		const newItem = createItem(itemName);
-		
-		listElement.prepend(newItem);
-		const items = getTasksFromDOM();
-		
-		saveTasks(items);
-	});
-	
-	deleteButton.addEventListener("click", function() {
-		clone.remove();
-		const items = getTasksFromDOM();
-		
-		saveTasks(items);
-	});
+    textElement.textContent = item;
 
-	return clone;
+    deleteButton.addEventListener("click", function () {
+        clone.remove();
+        const items = getTasksFromDOM();
+        saveTasks(items);
+    });
+
+    duplicateButton.addEventListener("click", function () {
+        const itemName = textElement.textContent;
+        const newItem = createItem(itemName);
+        listElement.prepend(newItem);
+        const items = getTasksFromDOM();
+        saveTasks(items);
+    });
+
+    return clone;
 }
 
 function getTasksFromDOM() {
-	const itemsNamesElements = listElement.querySelectorAll('.to-do__item-text');
+    const itemsNamesElements = listElement.querySelectorAll(".to-do__item-text");
     const tasks = [];
-    
     itemsNamesElements.forEach(element => {
         tasks.push(element.textContent);
     });
-    
     return tasks;
 }
 
 function saveTasks(tasks) {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
+// Загружаем задачи и отображаем их
 items = loadTasks();
-
-items.forEach(item => {
-    const taskElement = createItem(item);
-	
-    listElement.append(taskElement);
+items.forEach(function (item) {
+    listElement.append(createItem(item));
 });
 
-formElement.addEventListener('submit', function (event) {
-    event.preventDefault();
+// Обработчик отправки формы
+formElement.addEventListener("submit", function (event) {
+    event.preventDefault(); // Отключаем перезагрузку страницы
+
     const taskText = inputElement.value.trim();
-	
-    if (taskText !== '') {
-        const newTaskElement = createItem(taskText);
-		
-        listElement.prepend(newTaskElement);
+    if (taskText === "") return; // Защита от пустых задач
 
-        items = getTasksFromDOM();
-        saveTasks(items);
+    // Создаём и добавляем новый элемент в начало списка
+    listElement.prepend(createItem(taskText));
 
-        formElement.reset();
-    }
+    // Обновляем массив items и сохраняем в localStorage
+    items = getTasksFromDOM();
+    saveTasks(items);
+
+    // Очищаем поле ввода
+    inputElement.value = "";
 });
-
