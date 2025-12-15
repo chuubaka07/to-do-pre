@@ -69,7 +69,7 @@ items.forEach(function (item) {
 formElement.addEventListener("submit", function (event) {
     event.preventDefault(); // Отключаем перезагрузку страницы
 
-    const taskText = inputElement.value.trim();
+    const taskText = inputElement.value;
     if (taskText === "") return; // Защита от пустых задач
 
     // Создаём и добавляем новый элемент в начало списка
