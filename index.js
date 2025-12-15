@@ -44,7 +44,7 @@ function createItem(item) {
     });
 
     return clone;
-}}
+}
 
 function getTasksFromDOM() {
     const itemsNamesElements = listElement.querySelectorAll(".to-do__item-text");
